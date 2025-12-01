@@ -1,4 +1,4 @@
-with open("1_input.txt", "r") as f:
+with open("input.txt", "r") as f:
     input = f.read()
 
 rotations_list = input.split()

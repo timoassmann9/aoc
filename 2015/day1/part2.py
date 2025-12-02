@@ -2,12 +2,14 @@ with open("input.txt", "r") as f:
     data = f.read()
 
 floor = 0
-for instruction in data:
+for idx, instruction in enumerate(data, start=1):
     if instruction not in ("(", ")"):
         continue
     if instruction == "(":
         floor += 1
     if instruction == ")":
         floor -= 1
-            
-print(floor)
+    
+    if floor == -1:
+        print(idx)
+        break

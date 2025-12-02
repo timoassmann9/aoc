@@ -27,4 +27,8 @@ visited = []
 visit_house(visited, pos)
 
 for direction in data:
+    pos = move(pos, direction)
+    if pos not in visited:
+        visit_house(visited, pos)
     
+print(len(visited))

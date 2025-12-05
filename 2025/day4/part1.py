@@ -3,10 +3,14 @@ def is_paper(obj: str):
 
 def check(grid, pos):
     row, column = pos
-    try:
-        return grid[row][column]
-    except IndexError:
+    if (
+        row < 0 or
+        row > len(grid) - 1 or
+        column < 0 or
+        column > len(grid[row]) - 1
+    ):
         return ""
+    return grid[row][column]
 
 def is_accessible(grid: list[str], pos: tuple[int, int]):
     row, column = pos
@@ -22,6 +26,7 @@ def is_accessible(grid: list[str], pos: tuple[int, int]):
     nw = row - 1, column - 1
 
     adjacent_pos = [n, ne, e, se, s, sw, w, nw]
+
     for position in adjacent_pos:
         if is_paper(check(grid, position)):
             adjacent_rolls += 1
@@ -37,15 +42,11 @@ with open("input.txt", "r") as f:
 grid = data.split()
 accessible_rolls = 0
 
-for i in range(2):
-    print(f"row: {i}")
+for i in range(len(grid)):
     for j in range(len(grid[i])):
         if not is_paper(grid[i][j]):
             continue
         if is_accessible(grid, (i, j)):
             accessible_rolls += 1
-            print(f"Rolle an Position {j} ist accessible")
-        else:
-            print(f"Rolle an Position {j} ist nicht accessible")
 
 print(accessible_rolls)

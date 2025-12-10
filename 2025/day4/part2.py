@@ -38,8 +38,7 @@ with open("input.txt", "r") as f:
     data = f.read()
 
 grid = data.split()
-for x in range(len(grid)):
-    grid[x] = list(grid[x])
+grid = [list(x) for x in grid]
 
 total_accessible_rolls = 0
 while True:

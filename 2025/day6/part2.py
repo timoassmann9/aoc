@@ -22,11 +22,16 @@ end = l
 for i in reversed(range(l)):
     chars = [line[i] for line in lines]
     if all(char == chars[0] for char in chars) or i == 0:
-        problem = list()
+        problem: list[str] = list()
         for j in reversed(range(i if i == 0 else i + 1, end)):
-            problem.append("".join([line[j] for line in lines if line[j]]))
-
-        solutions.append(calc([line[start:i if i < l - 1 else i + 1] for line in lines]))
-        start = i + 1
+            problem.append("".join([line[j] for line in lines if line[j] != " "]))
+        for x, number in enumerate(problem):
+            if number.endswith("+") or number.endswith("*"):
+                number, operator = number[:-1], number[-1]
+                problem[x] = number
+                problem.append(operator)
+                break
+        solutions.append(calc(problem))
+        end = i
 
 print(sum(solutions))

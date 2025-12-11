@@ -89,36 +89,47 @@ if __name__ == "__main__":
             elif char == "^":
                 line.append(Splitter(j, len(data) - i - 1))
         map.append(line)
+        
+    particle = TachyonParticle(0, 0)
 
     for obj in map[-1]:
         if isinstance(obj, Start):
-            particle = TachyonParticle(obj.x, obj.y)
+            particle.x, particle.y = obj.x, obj.y
             print(f"particle erstellt bei {particle.x}, {particle.y}")
             break
 
     while particle.y > 0:
-        print("hier rein")
-        print(particle.x, particle.y)
         current_obj = map[particle.y][particle.x]
         while not isinstance(current_obj, Splitter) and particle.y > 0:
             particle.move_down()
             current_obj = map[particle.y][particle.x]
-        if isinstance(current_obj, Splitter):
+        if isinstance(current_obj, Splitter) and not current_obj.went_left:
             print(f"Splitter bei {particle.x}, {particle.y}")
             particle.path.append(current_obj)
             particle.move_left()
             current_obj.went_left = True
+    timelines += 1
 
     latest_splitter = particle.path[-1]
     while not latest_splitter.went_right:
         particle.jump(latest_splitter.x, latest_splitter.y)
         particle.move_right()
         latest_splitter.went_right = True
-        
-
+        while particle.y > 0:
+            current_obj = map[particle.y][particle.x]
+            while not isinstance(current_obj, Splitter) and particle.y > 0:
+                particle.move_down()
+                current_obj = map[particle.y][particle.x]
+            if isinstance(current_obj, Splitter) and not current_obj.went_left:
+                particle.path.append(current_obj)
+                particle.move_left()
+                current_obj.went_left = True
+        timelines += 1
+        particle.path.remove(latest_splitter)
+        latest_splitter = particle.path[-1]
+# spoiler: this does not work, probably stuck in the loop somewhere
     for obj in particle.path:
         print(obj.x, obj.y, obj.went_left, obj.went_right)
-    timelines += 1
 
     # for i in reversed(range(len(map))):
     #     print(map[i])
